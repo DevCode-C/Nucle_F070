@@ -3,7 +3,7 @@ TARGET = temp
 #Archivos a compilar
 SRCS  = main.c app_ints.c app_msps.c startup_stm32f070xb.c system_stm32f0xx.c 
 SRCS += stm32f0xx_hal.c stm32f0xx_hal_cortex.c stm32f0xx_hal_rcc.c stm32f0xx_hal_flash.c
-SRCS += stm32f0xx_hal_gpio.c
+SRCS += stm32f0xx_hal_gpio.c stm32f0xx_hal_uart.c stm32f0xx_hal_exti.c stm32f0xx_hal_dma.c
 #archivo linker a usar
 LINKER = linker.ld
 #Simbolos gloobales del programa (#defines globales)
@@ -42,25 +42,25 @@ $(TARGET) : $(addprefix Build/, $(TARGET).elf)
 	$(TOOLCHAIN)-size --format=berkeley $<
 
 Build/$(TARGET).elf : $(OBJS)
-	$(TOOLCHAIN)-gcc $(LFLAGS) -T $(LINKER) -o $@ $^
+	@$(TOOLCHAIN)-gcc $(LFLAGS) -T $(LINKER) -o $@ $^
 
 Build/obj/%.o : %.c
-	$(TOOLCHAIN)-gcc $(CFLAGS) $(INCLS) $(SYMBOLS) -o $@ -c $<
+	@$(TOOLCHAIN)-gcc $(CFLAGS) $(INCLS) $(SYMBOLS) -o $@ -c $<
 
 Build/obj/%.o : %.s
-	$(TOOLCHAIN)-as $(AFLAGS) -o $@ -c $<
+	@$(TOOLCHAIN)-as $(AFLAGS) -o $@ -c $<
 
 build :
-	mkdir -p Build/obj
+	@mkdir -p Build/obj
 
 -include $(DEPS)
 
 #borrar archivos generados
 clean :
-	rm -rf Output Build
+	@rm -rf Output Build
 
 #Programar al tarjeta
-flash :
+flash : all
 	openocd -f interface/stlink-v2-1.cfg -f target/stm32f0x.cfg -c "program Build/$(TARGET).hex verify reset" -c shutdown
 #Conectar OpenOCD con al Tarjeta
 open :

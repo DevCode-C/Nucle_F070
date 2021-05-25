@@ -1,6 +1,8 @@
 #include "stm32f0xx.h"
 #include <stdint.h>
 #include "app_bsp.h"
+#include "stm32f0xx_hal_conf.h"
+#include "stm32f070xb.h"
 
 
 /**------------------------------------------------------------------------------------------------
@@ -20,13 +22,21 @@ int main( void )
     GPIO_InitStruct.Pin   = GPIO_PIN_5;
     HAL_GPIO_Init( GPIOA, &GPIO_InitStruct );
     
+    HAL_NVIC_SetPriority(WWDG_IRQn,1,0);
+    HAL_NVIC_EnableIRQ(WWDG_IRQn);
 
     for( ; ; )
     {
-        HAL_GPIO_TogglePin( GPIOA, GPIO_PIN_5 );
+        
+        HAL_NVIC_SetPendingIRQ(WWDG_IRQn);
         HAL_Delay( 200u );
     }
 
     return 0u;
+}
+
+void WWDG_IRQHandler(void)
+{
+    HAL_GPIO_TogglePin( GPIOA, GPIO_PIN_5 );
 }
 
