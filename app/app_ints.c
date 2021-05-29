@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include "app_bsp.h"
 #include "stm32f0xx_hal_conf.h"
+#include "stm32f070xb.h"
 
 
 /**------------------------------------------------------------------------------------------------
@@ -52,15 +53,19 @@ void EXTI4_15_IRQHandler(void)
 
 void EXTI0_1_IRQHandler(void)
 {
-    if (HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0))
+    // EXTI_HandleTypeDef pendingBit;
+    // pendingBit.Line = 0;
+    // uint32_t pending = EXTI->PR;
+    
+    // if (HAL_EXTI_GetPending(&pendingBit,GPIO_MODE_IT_RISING))
+    if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_0))
     {
         HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_0);
     }
-    else
+    // if (HAL_EXTI_GetPending(&pendingBit,GPIO_MODE_IT_RISING))
+    else if(__HAL_GPIO_EXTI_GET_IT(GPIO_PIN_1))
     {
-        HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
+       HAL_GPIO_EXTI_IRQHandler(GPIO_PIN_1);
     }
-    
-    
     
 }

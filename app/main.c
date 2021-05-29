@@ -17,7 +17,7 @@ int main( void )
     GPIO_InitTypeDef  GPIO_InitStruct;
 
     HAL_Init( );
-
+    
     __HAL_RCC_GPIOA_CLK_ENABLE( );
 
     GPIO_InitStruct.Mode  = GPIO_MODE_OUTPUT_PP;
@@ -33,15 +33,15 @@ int main( void )
     GPIO_InitStruct.Pin   = GPIO_PIN_0 |GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4;
     HAL_GPIO_Init(GPIOC,&GPIO_InitStruct);
 
-    GPIO_InitStruct.Mode  = GPIO_MODE_IT_FALLING;
+    GPIO_InitStruct.Mode  = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Pin   = GPIO_PIN_13;
     HAL_GPIO_Init(GPIOC,&GPIO_InitStruct);
 
     GPIO_InitStruct.Mode  = GPIO_MODE_IT_RISING;
     GPIO_InitStruct.Pull  = GPIO_NOPULL;
-    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
     GPIO_InitStruct.Pin   = GPIO_PIN_0 | GPIO_PIN_1;
     HAL_GPIO_Init(GPIOA,&GPIO_InitStruct);
     
@@ -71,6 +71,7 @@ int main( void )
             tickTimer2 = HAL_GetTick();
             HAL_GPIO_TogglePin(GPIOC,GPIO_PIN_4);
         }
+        
     }
 
     return 0u;
